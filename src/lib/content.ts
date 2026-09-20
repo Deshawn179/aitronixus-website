@@ -12,7 +12,10 @@ export const site = {
   tagline: "Redefining the Future of Intelligent Infrastructure",
   description:
     "AiTroniXus unifies artificial intelligence, cloud architecture, software engineering and enterprise infrastructure to build systems that think, adapt and scale.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aitronixus.com",
+  // Vercel may expose a detected-but-empty value from `.env.example` during
+  // the first import. Treat an empty string as unset so metadata generation
+  // always receives a valid absolute URL.
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.aitronixus.com",
 } as const;
 
 export const nav = [
