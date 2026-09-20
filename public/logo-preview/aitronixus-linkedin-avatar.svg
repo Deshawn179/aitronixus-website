@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
+  <title id="title">AiTroniXus LinkedIn avatar</title>
+  <desc id="desc">Nexus Gate brand mark on a dark square background.</desc>
+  <rect width="800" height="800" fill="#03070D"/>
+  <path d="M0 80H800M0 240H800M0 400H800M0 560H800M0 720H800M80 0V800M240 0V800M400 0V800M560 0V800M720 0V800" stroke="#43DDF2" stroke-opacity=".055" stroke-width="1"/>
+  <rect x="92" y="92" width="616" height="616" rx="104" fill="none" stroke="#43DDF2" stroke-opacity=".18" stroke-width="3"/>
+  <g transform="translate(100 100) scale(2)">
+    <path fill="#43DDF2" d="M150 24 248 81v90l-39-23v-44l-59-34-59 34v44l-39 23V81z"/>
+    <path fill="#F5F8FC" d="m248 127 39 23v67l-98 57v-45l59-34z" transform="translate(-39 0)"/>
+    <path fill="#3974FF" d="m52 172 39-23 59 34 59-34 39 23v45l-98 57-98-57z"/>
+    <path fill="#03070D" d="m150 108 35 20v44l-35 20-35-20v-44z"/>
+    <path fill="#43DDF2" d="m150 123 21 12v24l-21 12-21-12v-24z"/>
+  </g>
+</svg>

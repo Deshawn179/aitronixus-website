@@ -1,0 +1,357 @@
+/* ==========================================================================
+   Site chrome — navigation, footer, cursor, progress, utilities
+   ========================================================================== */
+
+.sr-only-brand {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation
+   -------------------------------------------------------------------------- */
+
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 120;
+  transition:
+    background-color var(--dur-mid) var(--ease-out-expo),
+    border-color var(--dur-mid) var(--ease-out-expo),
+    backdrop-filter var(--dur-mid) var(--ease-out-expo),
+    opacity var(--dur-mid) var(--ease-out-expo);
+  border-bottom: 1px solid transparent;
+}
+
+/* Glass is used here because the bar genuinely sits over moving content. */
+.site-nav[data-scrolled] {
+  background: color-mix(in oklab, #030507 76%, transparent);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  border-bottom-color: var(--hairline);
+}
+
+/* The film owns the viewport; the chrome waits its turn. */
+html[data-intro="running"] .site-nav,
+html[data-intro="running"] .scroll-progress {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.site-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 76px;
+  transition: height var(--dur-mid) var(--ease-out-expo);
+}
+.site-nav[data-scrolled] .site-nav__inner {
+  height: 64px;
+}
+
+.site-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.site-nav__links {
+  display: none;
+  align-items: center;
+  gap: clamp(0.5rem, 0.1rem + 1.2vw, 1.75rem);
+}
+
+.site-nav__link {
+  position: relative;
+  padding: 0.5rem 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--step-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+  transition: color var(--dur-fast) var(--ease-out-expo);
+}
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  bottom: 0.15rem;
+  height: 1px;
+  background: var(--color-cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-mid) var(--ease-out-expo);
+}
+.site-nav__link:hover,
+.site-nav__link[data-active] {
+  color: var(--color-cool);
+}
+.site-nav__link:hover::after,
+.site-nav__link[data-active]::after {
+  transform: scaleX(1);
+}
+
+.site-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: none;
+}
+
+/* .btn sets display:inline-flex and is declared later in the cascade, so this
+   needs the extra specificity to win. */
+.site-nav .site-nav__cta {
+  display: none;
+}
+
+.site-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  color: var(--color-cool);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out-expo);
+}
+.site-nav__toggle:hover {
+  border-color: var(--hairline-bright);
+}
+
+.site-nav__bars {
+  display: grid;
+  gap: 5px;
+  width: 18px;
+}
+.site-nav__bars span {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  transition:
+    transform var(--dur-fast) var(--ease-out-expo),
+    opacity var(--dur-fast) var(--ease-out-expo);
+}
+.site-nav__bars[data-open] span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+.site-nav__bars[data-open] span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+@media (min-width: 1040px) {
+  .site-nav__links {
+    display: flex;
+  }
+  .site-nav .site-nav__cta {
+    display: inline-flex;
+  }
+  .site-nav__toggle {
+    display: none;
+  }
+}
+
+/* --- Mobile panel ---------------------------------------------------- */
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+.mobile-menu {
+  animation: menu-in 420ms var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklab, #030507 96%, transparent);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  padding: 1.5rem var(--gutter) 2rem;
+  max-height: calc(100dvh - 64px);
+  overflow-y: auto;
+}
+
+.mobile-menu__list {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-menu__link {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  letter-spacing: -0.03em;
+  color: var(--color-cool);
+  transition: color var(--dur-fast) var(--ease-out-expo);
+}
+.mobile-menu__link:hover {
+  color: var(--color-cyan);
+}
+.mobile-menu__link .tech-label {
+  flex: none;
+}
+
+.mobile-menu__cta {
+  width: 100%;
+}
+
+.mobile-menu__foot {
+  margin-top: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll progress
+   -------------------------------------------------------------------------- */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 130;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--color-ion), var(--color-cyan));
+  box-shadow: 0 0 14px color-mix(in oklab, #50e6ff 60%, transparent);
+  transition: opacity var(--dur-mid) var(--ease-out-expo);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Cursor aura — decorative, pointer devices only
+   -------------------------------------------------------------------------- */
+
+.cursor-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in oklab, #50e6ff 55%, transparent);
+  z-index: 250;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.cursor-aura::after {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklab, #50e6ff 22%, transparent), transparent 70%);
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-aura {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--hairline);
+  background: linear-gradient(180deg, var(--color-void), var(--color-carbon));
+  padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem) 2rem;
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 860px) {
+  .site-footer__grid {
+    grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  }
+}
+
+.footer-col__title {
+  font-family: var(--font-mono);
+  font-size: var(--step-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cool);
+  margin-bottom: 1.15rem;
+}
+
+.footer-col__list {
+  display: grid;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-link {
+  font-size: var(--step--1);
+  color: var(--color-steel);
+  transition: color var(--dur-fast) var(--ease-out-expo);
+}
+.footer-link:hover {
+  color: var(--color-cyan);
+}
+
+.placeholder-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px dashed color-mix(in oklab, #8a99aa 40%, transparent);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-steel-dim);
+}
+
+.site-footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-top: clamp(3rem, 2rem + 3vw, 4.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-cyan);
+  box-shadow: 0 0 10px var(--color-cyan);
+  flex: none;
+}

@@ -1,0 +1,362 @@
+/* ==========================================================================
+   Cinematic entry
+   The overlay boots as a plain sheet of --color-void — the same colour as the
+   page behind it — so no transition in or out is ever visible as a flash.
+   ========================================================================== */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--color-void);
+  overflow: hidden;
+  display: grid;
+  /* The identity sits in the lower third rather than dead centre: the film's
+     own subject — the craft, then the illuminated die — owns the middle of the
+     frame, and a centred wordmark would collide with it. */
+  place-items: end center;
+  /* iOS: keep the sheet full-bleed under the dynamic browser chrome. */
+  height: 100dvh;
+}
+
+/* The hand-off. The overlay fades as one plane while the film pushes very
+   slightly forward, so the last frame dissolves into the hero's dark
+   environment instead of ending as a separate media block. */
+.intro[data-phase="dissolve"] {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1100ms var(--ease-out-expo);
+}
+
+.intro__stage {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+  transform-origin: 50% 46%;
+  transform: scale(1);
+  transition:
+    transform 1200ms var(--ease-out-expo),
+    opacity 1200ms var(--ease-out-expo);
+}
+
+.intro[data-phase="dissolve"] .intro__stage {
+  transform: scale(1.07);
+  opacity: 0;
+}
+
+/* Abbreviated pass: no film is fetched at all, just the graded environment. */
+.intro__stage--still {
+  background:
+    radial-gradient(120% 90% at 50% 42%, color-mix(in oklab, #071523 92%, transparent), transparent 70%),
+    radial-gradient(60% 50% at 50% 55%, color-mix(in oklab, #0078d4 22%, transparent), transparent 72%),
+    var(--color-void);
+}
+
+.intro__video {
+  width: 100%;
+  height: 100%;
+  /* Preserves the 16:9 composition on every aspect ratio. */
+  object-fit: cover;
+  object-position: 50% 46%;
+  background-color: var(--color-void);
+}
+
+/* Grades the footage toward the palette and darkens the lower third so the
+   identity always has contrast to sit against. */
+.intro__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, #030507 62%, transparent) 0%, transparent 24%),
+    /* Deep lower scrim — the title card's ground. The footage is bright and
+       busy exactly where the wordmark lands, so this has to carry real weight. */
+    linear-gradient(
+      0deg,
+      color-mix(in oklab, #030507 98%, transparent) 0%,
+      color-mix(in oklab, #030507 94%, transparent) 14%,
+      color-mix(in oklab, #030507 76%, transparent) 30%,
+      transparent 62%
+    ),
+    radial-gradient(80% 60% at 50% 46%, transparent 28%, color-mix(in oklab, #04101b 60%, transparent) 100%);
+}
+
+.intro__dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--color-void);
+  opacity: 0;
+  transition: opacity 1100ms var(--ease-out-expo);
+}
+.intro[data-phase="identity"] .intro__dim,
+.intro[data-phase="chrome"] .intro__dim,
+.intro[data-phase="dissolve"] .intro__dim {
+  opacity: 0.55;
+}
+
+.intro__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 min(22vw, 260px) min(6vw, 70px) var(--color-void);
+}
+
+/* --- restrained flight-deck interface -------------------------------- */
+
+.intro__hud {
+  position: absolute;
+  inset: clamp(1rem, 2.5vw, 2.5rem);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 700ms var(--ease-out-expo);
+}
+/* The flight deck is present only while the craft is. */
+.intro[data-phase="flight"] .intro__hud,
+.intro[data-phase="transition"] .intro__hud {
+  opacity: 1;
+}
+
+.intro__hud-tick {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid color-mix(in oklab, #f4f8fc 34%, transparent);
+}
+.intro__hud-tick--tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+.intro__hud-tick--tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+.intro__hud-tick--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+.intro__hud-tick--br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+.intro__hud-line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--step-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, #f4f8fc 62%, transparent);
+}
+
+/* --- identity -------------------------------------------------------- */
+
+.intro__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  padding-inline: var(--gutter);
+  padding-bottom: clamp(2.5rem, 9vh, 6.5rem);
+  text-align: center;
+}
+
+/* A soft local wash directly behind the title card, so the identity holds its
+   contrast wherever the frame happens to be bright. */
+.intro__content::before {
+  content: "";
+  position: absolute;
+  inset: -12% -10% -40%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    58% 130% at 50% 70%,
+    color-mix(in oklab, #030507 88%, transparent),
+    transparent 72%
+  );
+}
+
+/* --- staged reveal -----------------------------------------------------
+   Each element has its own transition and delay; the phase attribute on the
+   root is the only switch. No JS animation loop is involved, so the identity
+   cannot be left half-revealed. */
+
+.intro__identity {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  will-change: transform, opacity, filter;
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(10px);
+  transition:
+    opacity 1150ms var(--ease-out-expo),
+    transform 1150ms var(--ease-out-expo),
+    filter 1150ms var(--ease-out-expo);
+}
+
+.intro[data-phase="identity"] .intro__identity,
+.intro[data-phase="chrome"] .intro__identity,
+.intro[data-phase="dissolve"] .intro__identity {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.intro__mark {
+  color: var(--color-steel);
+}
+
+.intro__wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 1.2rem + 4.4vw, 4.6rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0;
+}
+.intro__wm-ai {
+  font-weight: 700;
+  color: var(--color-cool);
+}
+.intro__wm-troni {
+  font-weight: 300;
+  color: color-mix(in oklab, #f4f8fc 80%, transparent);
+}
+.intro__wm-x {
+  font-weight: 600;
+  color: var(--color-cyan);
+  text-shadow: 0 0 42px color-mix(in oklab, #50e6ff 70%, transparent);
+}
+.intro__wm-us {
+  font-weight: 300;
+  color: var(--color-steel);
+}
+
+.intro__tagline {
+  margin: 0;
+  color: color-mix(in oklab, #50e6ff 78%, #f4f8fc);
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out-expo) 350ms;
+}
+
+.intro__rule {
+  display: block;
+  width: min(320px, 58vw);
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: center;
+  background: linear-gradient(90deg, transparent, var(--color-cyan), transparent);
+  transition: transform 1100ms var(--ease-out-expo) 450ms;
+}
+
+.intro__sub {
+  max-width: 34ch;
+  font-size: var(--step--1);
+  color: color-mix(in oklab, #f4f8fc 58%, transparent);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 900ms var(--ease-out-expo),
+    transform 900ms var(--ease-out-expo);
+}
+
+.intro[data-phase="identity"] .intro__tagline,
+.intro[data-phase="chrome"] .intro__tagline,
+.intro[data-phase="dissolve"] .intro__tagline {
+  opacity: 1;
+}
+
+.intro[data-phase="identity"] .intro__rule,
+.intro[data-phase="chrome"] .intro__rule,
+.intro[data-phase="dissolve"] .intro__rule {
+  transform: scaleX(1);
+}
+
+.intro[data-phase="chrome"] .intro__sub,
+.intro[data-phase="dissolve"] .intro__sub {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- controls -------------------------------------------------------- */
+
+.intro__controls {
+  position: absolute;
+  z-index: 3;
+  right: clamp(1rem, 2.5vw, 2.5rem);
+  top: clamp(1rem, 2.5vw, 2.5rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.intro__skip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.9rem;
+  background: color-mix(in oklab, #030507 45%, transparent);
+  border: 1px solid color-mix(in oklab, #f4f8fc 18%, transparent);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: var(--step-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, #f4f8fc 76%, transparent);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out-expo),
+    border-color var(--dur-fast) var(--ease-out-expo);
+}
+.intro__skip:hover {
+  color: var(--color-cool);
+  border-color: var(--hairline-bright);
+}
+
+.intro__skip-key {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid color-mix(in oklab, #f4f8fc 22%, transparent);
+  border-radius: 2px;
+  font-size: 0.58rem;
+  color: var(--color-steel);
+}
+
+.intro__progress {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  width: 108px;
+  height: 2px;
+  background: color-mix(in oklab, #f4f8fc 14%, transparent);
+  overflow: hidden;
+}
+.intro__progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: var(--color-cyan);
+}
+
+@media (max-width: 560px) {
+  .intro__progress {
+    width: 72px;
+  }
+}

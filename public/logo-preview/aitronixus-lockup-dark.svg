@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">AiTroniXus</title><desc id="desc">AiTroniXus wordmark with Nexus Gate symbol.</desc>
+  <rect width="1280" height="360" fill="#03070D"/>
+  <g transform="translate(42 30) scale(.9)">
+    <path fill="#43DDF2" d="M150 24 248 81v90l-39-23v-44l-59-34-59 34v44l-39 23V81z"/>
+    <path fill="#F5F8FC" d="m248 127 39 23v67l-98 57v-45l59-34z" transform="translate(-39 0)"/>
+    <path fill="#3974FF" d="m52 172 39-23 59 34 59-34 39 23v45l-98 57-98-57z"/>
+    <path fill="#03070D" d="m150 108 35 20v44l-35 20-35-20v-44z"/>
+    <path fill="#43DDF2" d="m150 123 21 12v24l-21 12-21-12v-24z"/>
+  </g>
+  <text x="350" y="214" fill="#F5F8FC" font-family="Arial, Helvetica, sans-serif" font-size="118" font-weight="700" letter-spacing="-5">AiTroni<tspan fill="#43DDF2">X</tspan><tspan fill="#AAB9CC">us</tspan></text>
+</svg>

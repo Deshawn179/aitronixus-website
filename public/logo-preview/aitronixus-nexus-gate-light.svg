@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-labelledby="title desc">
+  <title id="title">AiTroniXus Nexus Gate mark</title>
+  <desc id="desc">Three converging infrastructure paths form an intelligent gateway around a hexagonal core.</desc>
+  <rect width="300" height="300" fill="#F5F8FC"/>
+  <path fill="#007A99" d="M150 24 248 81v90l-39-23v-44l-59-34-59 34v44l-39 23V81z"/>
+  <path fill="#071523" d="m248 127 39 23v67l-98 57v-45l59-34z" transform="translate(-39 0)"/>
+  <path fill="#2362D9" d="m52 172 39-23 59 34 59-34 39 23v45l-98 57-98-57z"/>
+  <path fill="#F5F8FC" d="m150 108 35 20v44l-35 20-35-20v-44z"/>
+  <path fill="#007A99" d="m150 123 21 12v24l-21 12-21-12v-24z"/>
+</svg>
