@@ -15,7 +15,11 @@ export const site = {
   // Vercel may expose a detected-but-empty value from `.env.example` during
   // the first import. Treat an empty string as unset so metadata generation
   // always receives a valid absolute URL.
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.aitronixus.com",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://www.aitronixus.com"),
 } as const;
 
 export const nav = [
